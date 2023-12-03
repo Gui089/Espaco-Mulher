@@ -17,12 +17,35 @@ const FormSection = () => (
         <option value="4">4</option>
         <option value="5">5</option>
         <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
       </select>
 
       <input type="text" placeholder="Manda aqui" />
 
-      <button>Adicionar</button>
+      <button className="btn-add">Adicionar</button>
     </form>
+  </div>
+);
+
+const Section = () => (
+  <div className="section">
+    <div className="options-order">
+      <select name="" id="">
+        <option value="Mais recents">Ordenar mais recentes</option>
+        <option value="Alfabeti">Ordem alfabética</option>
+      </select>
+
+      <button className="btn-clear">Limpar lista</button>
+    </div>
+  </div>
+);
+
+const Footer = () => (
+  <div className="footer-section">
+    <h3>Você tem 0 items na lista</h3>
   </div>
 );
 
@@ -31,6 +54,8 @@ const App = () => {
     <>
       <Header />
       <FormSection />
+      <Section />
+      <Footer />
     </>
   );
 };
