@@ -40,6 +40,7 @@ const Section = ({
   product,
   renderList,
   handleClickCheck,
+  handleClearClick,
 }) => {
   return (
     <div className="section">
@@ -75,15 +76,17 @@ const Section = ({
           <option value="Mais recents">Ordenar mais recentes</option>
           <option value="Alfabetic">Ordem alfabética</option>
         </select>
-        <button className="btn-clear">Limpar lista</button>
+        <button onClick={handleClearClick} className="btn-clear">
+          Limpar lista
+        </button>
       </div>
     </div>
   );
 };
 
-const Footer = ({ quantity }) => (
+const Footer = ({ product }) => (
   <div className="footer-section">
-    <h3>Você tem {quantity} items na lista</h3>
+    <h3>Você tem {product.length} items na lista</h3>
   </div>
 );
 
@@ -121,6 +124,8 @@ const App = () => {
     setQuantity(quantity.value);
   };
 
+  const handleClearClick = () => setProduct([]);
+
   return (
     <>
       <Header />
@@ -132,8 +137,9 @@ const App = () => {
         renderList={renderList}
         handleClickDelete={handleClickDelete}
         handleClickCheck={handleClickCheck}
+        handleClearClick={handleClearClick}
       />
-      <Footer quantity={quantity} />
+      <Footer product={product} />
     </>
   );
 };
