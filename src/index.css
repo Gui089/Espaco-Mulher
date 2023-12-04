@@ -71,6 +71,7 @@ input {
 
 .options-order {
   margin-top: 420px;
+  position: absolute;
 }
 
 .btn-clear {
@@ -90,4 +91,25 @@ input {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+ul {
+  display: flex;
+  list-style: none;
+  color: #242741;
+}
+
+li {
+  margin-right: 50px;
+}
+
+.x-btn {
+  background: none;
+  border: none;
+  margin-left: 5px;
+  margin-top: -2px;
+  font-size: 20px;
+  color: red;
+  cursor: pointer;
+  position: absolute;
 }

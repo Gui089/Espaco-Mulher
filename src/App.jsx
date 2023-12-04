@@ -34,14 +34,25 @@ const FormSection = ({ hadnleSubmit }) => {
   );
 };
 
-const Section = ({ quantity, product, renderList }) => {
+const Section = ({ quantity, product, renderList, renderCheck, isChecked }) => {
   return (
     <div className="section">
       {renderList && (
         <ul>
-          <li>
-            {quantity} {product}
-          </li>
+          {product.map((item, index) => (
+            <li key={index}>
+              <input onClick={renderCheck} type="checkbox" />
+              {isChecked === false ? (
+                item.quantity + item.product
+              ) : (
+                <del>
+                  {" "}
+                  {item.quantity} {item.product}
+                </del>
+              )}
+              <button className="x-btn">x</button>
+            </li>
+          ))}
         </ul>
       )}
       <div className="options-order">
@@ -64,7 +75,9 @@ const Footer = ({ quantity }) => (
 const App = () => {
   const [quantity, setQuantity] = useState(0);
 
-  const [product, setProduct] = useState("");
+  const [product, setProduct] = useState([]);
+
+  const [isChecked, setIsChecked] = useState(false);
 
   const renderList = quantity != 0 ? true : false;
 
@@ -72,11 +85,15 @@ const App = () => {
     e.preventDefault();
     const { quantity, product } = e.target.elements;
 
-    setQuantity(quantity.value);
-    setProduct(product.value);
+    setProduct((prevProducts) => [
+      ...prevProducts,
+      { quantity: quantity.value, product: product.value },
+    ]);
 
-    console.log(quantity, product);
+    setQuantity(quantity.value);
   };
+
+  const renderCheck = () => setIsChecked((c) => !c);
 
   return (
     <>
@@ -87,6 +104,8 @@ const App = () => {
         quantity={quantity}
         hadnleSubmit={hadnleSubmit}
         renderList={renderList}
+        renderCheck={renderCheck}
+        isChecked={isChecked}
       />
       <Footer quantity={quantity} />
     </>
