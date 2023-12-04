@@ -7,6 +7,8 @@ const Header = () => (
   </header>
 );
 
+const ids = Array.from({ length: 20 }, () => crypto.randomUUID());
+
 const FormSection = ({ hadnleSubmit }) => {
   return (
     <div className="section-form">
@@ -14,16 +16,11 @@ const FormSection = ({ hadnleSubmit }) => {
 
       <form onSubmit={hadnleSubmit} className="form-add">
         <select name="quantity">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
+          {ids.map((id, index) => (
+            <option key={id} value={index + 1}>
+              {index + 1}
+            </option>
+          ))}
         </select>
 
         <input name="product" type="text" placeholder="Manda aqui" />
@@ -34,23 +31,34 @@ const FormSection = ({ hadnleSubmit }) => {
   );
 };
 
-const Section = ({ quantity, product, renderList, renderCheck, isChecked }) => {
+const Section = ({
+  handleClickDelete,
+  product,
+  renderList,
+  renderCheck,
+  isChecked,
+}) => {
   return (
     <div className="section">
       {renderList && (
         <ul>
-          {product.map((item, index) => (
-            <li key={index}>
+          {product.map((item) => (
+            <li key={item.id}>
               <input onClick={renderCheck} type="checkbox" />
               {isChecked === false ? (
-                item.quantity + item.product
+                item.quantity + item.name
               ) : (
                 <del>
                   {" "}
-                  {item.quantity} {item.product}
+                  {item.quantity} {item.name}
                 </del>
               )}
-              <button className="x-btn">x</button>
+              <button
+                onClick={() => handleClickDelete(item.id)}
+                className="x-btn"
+              >
+                x
+              </button>
             </li>
           ))}
         </ul>
@@ -58,7 +66,7 @@ const Section = ({ quantity, product, renderList, renderCheck, isChecked }) => {
       <div className="options-order">
         <select name="" id="">
           <option value="Mais recents">Ordenar mais recentes</option>
-          <option value="Alfabeti">Ordem alfabética</option>
+          <option value="Alfabetic">Ordem alfabética</option>
         </select>
         <button className="btn-clear">Limpar lista</button>
       </div>
@@ -81,13 +89,21 @@ const App = () => {
 
   const renderList = quantity != 0 ? true : false;
 
+  const handleClickDelete = (id) =>
+    setProduct((prev) => prev.filter((item) => item.id !== id));
+
   const hadnleSubmit = (e) => {
     e.preventDefault();
     const { quantity, product } = e.target.elements;
 
     setProduct((prevProducts) => [
       ...prevProducts,
-      { quantity: quantity.value, product: product.value },
+      {
+        id: crypto.randomUUID(),
+        quantity: quantity.value,
+        name: product.value,
+        stored: false,
+      },
     ]);
 
     setQuantity(quantity.value);
@@ -106,6 +122,7 @@ const App = () => {
         renderList={renderList}
         renderCheck={renderCheck}
         isChecked={isChecked}
+        handleClickDelete={handleClickDelete}
       />
       <Footer quantity={quantity} />
     </>
