@@ -97,10 +97,16 @@ ul {
   display: flex;
   list-style: none;
   color: #242741;
+  font-size: 20px;
 }
 
 li {
   margin-right: 50px;
+}
+
+.check-input {
+  width: 20px;
+  height: 20px;
 }
 
 .x-btn {

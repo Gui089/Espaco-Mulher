@@ -35,8 +35,7 @@ const Section = ({
   handleClickDelete,
   product,
   renderList,
-  renderCheck,
-  isChecked,
+  handleClickCheck,
 }) => {
   return (
     <div className="section">
@@ -44,14 +43,18 @@ const Section = ({
         <ul>
           {product.map((item) => (
             <li key={item.id}>
-              <input onClick={renderCheck} type="checkbox" />
-              {isChecked === false ? (
-                item.quantity + item.name
-              ) : (
+              <input
+                type="checkbox"
+                checked={item.stored}
+                onChange={() => handleClickCheck(item.id)}
+                className="check-input"
+              />
+              {item.stored ? (
                 <del>
-                  {" "}
                   {item.quantity} {item.name}
                 </del>
+              ) : (
+                item.quantity + item.name
               )}
               <button
                 onClick={() => handleClickDelete(item.id)}
@@ -85,12 +88,17 @@ const App = () => {
 
   const [product, setProduct] = useState([]);
 
-  const [isChecked, setIsChecked] = useState(false);
-
   const renderList = quantity != 0 ? true : false;
 
   const handleClickDelete = (id) =>
     setProduct((prev) => prev.filter((item) => item.id !== id));
+
+  const handleClickCheck = (id) =>
+    setProduct((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, stored: !item.stored } : item,
+      ),
+    );
 
   const hadnleSubmit = (e) => {
     e.preventDefault();
@@ -109,8 +117,6 @@ const App = () => {
     setQuantity(quantity.value);
   };
 
-  const renderCheck = () => setIsChecked((c) => !c);
-
   return (
     <>
       <Header />
@@ -120,9 +126,8 @@ const App = () => {
         quantity={quantity}
         hadnleSubmit={hadnleSubmit}
         renderList={renderList}
-        renderCheck={renderCheck}
-        isChecked={isChecked}
         handleClickDelete={handleClickDelete}
+        handleClickCheck={handleClickCheck}
       />
       <Footer quantity={quantity} />
     </>
