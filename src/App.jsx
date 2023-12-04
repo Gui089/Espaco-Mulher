@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const Header = () => (
   <header className="header">
-    <img className="logo" src="../images/logo-espaco-mulher.png" alt="logo" />
+    <img className="logo" src="./images/logo-espaco-mulher.png" alt="logo" />
     <h1>Espaço Mulher</h1>
   </header>
 );
