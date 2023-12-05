@@ -37,44 +37,43 @@ const FormSection = ({ hadnleSubmit }) => {
 
 const Section = ({
   handleClickDelete,
-  product,
-  renderList,
   handleClickCheck,
   handleClearClick,
+  orderBy,
+  handleChangeOrder,
+  sortedItems,
 }) => {
   return (
     <div className="section">
-      {renderList && (
-        <ul>
-          {product.map((item) => (
-            <li key={item.id}>
-              <input
-                type="checkbox"
-                checked={item.stored}
-                onChange={() => handleClickCheck(item.id)}
-                className="check-input"
-              />
-              {item.stored ? (
-                <del>
-                  {item.quantity} {item.name}
-                </del>
-              ) : (
-                item.quantity + item.name
-              )}
-              <button
-                onClick={() => handleClickDelete(item.id)}
-                className="x-btn"
-              >
-                x
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul>
+        {sortedItems.map((item) => (
+          <li key={item.id}>
+            <input
+              type="checkbox"
+              checked={item.stored}
+              onChange={() => handleClickCheck(item.id)}
+              className="check-input"
+            />
+            {item.stored ? (
+              <del>
+                {item.quantity} {item.name}
+              </del>
+            ) : (
+              item.quantity + item.name
+            )}
+            <button
+              onClick={() => handleClickDelete(item.id)}
+              className="x-btn"
+            >
+              x
+            </button>
+          </li>
+        ))}
+      </ul>
       <div className="options-order">
-        <select name="" id="">
-          <option value="Mais recents">Ordenar mais recentes</option>
-          <option value="Alfabetic">Ordem alfabética</option>
+        <select value={orderBy} onChange={handleChangeOrder}>
+          <option value="newest">Ordenar mais recentes</option>
+          <option value="stored">Mostrar Guardados</option>
         </select>
         <button onClick={handleClearClick} className="btn-clear">
           Limpar lista
@@ -95,7 +94,7 @@ const App = () => {
 
   const [product, setProduct] = useState([]);
 
-  const renderList = quantity != 0 ? true : false;
+  const [orderBy, setOrderBy] = useState("newest");
 
   const handleClickDelete = (id) =>
     setProduct((prev) => prev.filter((item) => item.id !== id));
@@ -126,6 +125,11 @@ const App = () => {
 
   const handleClearClick = () => setProduct([]);
 
+  const handleChangeOrder = (e) => setOrderBy(e.target.value);
+
+  const sortedItems =
+    orderBy === "stored" ? product.filter((item) => item.stored) : product;
+
   return (
     <>
       <Header />
@@ -133,13 +137,15 @@ const App = () => {
       <Section
         product={product}
         quantity={quantity}
+        orderBy={orderBy}
         hadnleSubmit={hadnleSubmit}
-        renderList={renderList}
         handleClickDelete={handleClickDelete}
         handleClickCheck={handleClickCheck}
         handleClearClick={handleClearClick}
+        handleChangeOrder={handleChangeOrder}
+        sortedItems={sortedItems}
       />
-      <Footer product={product} />
+      <Footer product={product} handleChangeOrder={handleChangeOrder} />
     </>
   );
 };
