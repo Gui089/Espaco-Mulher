@@ -13,7 +13,25 @@ const Header = () => (
 
 const ids = Array.from({ length: 20 }, () => crypto.randomUUID());
 
-const FormSection = ({ hadnleSubmit }) => {
+const FormSection = ({ onHandleSubmit }) => {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleChangeInput = (e) => setInputValue(e.target.value);
+
+  const hadnleSubmit = (e) => {
+    e.preventDefault();
+
+    const { quantity } = e.target.elements;
+    onHandleSubmit({
+      id: crypto.randomUUID(),
+      quantity: quantity.value,
+      name: inputValue,
+      stored: false,
+    });
+
+    setInputValue("");
+  };
+
   return (
     <div className="section-form">
       <h3>O que você precisa guardar ? </h3>
@@ -27,7 +45,13 @@ const FormSection = ({ hadnleSubmit }) => {
           ))}
         </select>
 
-        <input name="product" type="text" placeholder="Manda aqui" />
+        <input
+          value={inputValue}
+          onChange={handleChangeInput}
+          type="text"
+          placeholder="Manda aqui"
+          autoFocus
+        />
 
         <button className="btn-add">Adicionar</button>
       </form>
@@ -106,24 +130,10 @@ const App = () => {
       ),
     );
 
-  const hadnleSubmit = (e) => {
-    e.preventDefault();
-    const { quantity, product } = e.target.elements;
-
-    setProduct((prevProducts) => [
-      ...prevProducts,
-      {
-        id: crypto.randomUUID(),
-        quantity: quantity.value,
-        name: product.value,
-        stored: false,
-      },
-    ]);
-
-    setQuantity(quantity.value);
-  };
-
   const handleClearClick = () => setProduct([]);
+
+  const handleSubmit = (newPRoduct) =>
+    setProduct((prev) => [...prev, newPRoduct]);
 
   const handleChangeOrder = (e) => setOrderBy(e.target.value);
 
@@ -133,12 +143,11 @@ const App = () => {
   return (
     <>
       <Header />
-      <FormSection hadnleSubmit={hadnleSubmit} />
+      <FormSection onHandleSubmit={handleSubmit} />
       <Section
         product={product}
         quantity={quantity}
         orderBy={orderBy}
-        hadnleSubmit={hadnleSubmit}
         handleClickDelete={handleClickDelete}
         handleClickCheck={handleClickCheck}
         handleClearClick={handleClearClick}
