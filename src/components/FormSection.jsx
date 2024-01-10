@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const ids = Array.from({ length: 20 }, () => crypto.randomUUID());
 
 const FormSection = ({ onHandleSubmit }) => {
   const [inputValue, setInputValue] = useState("");
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    console.log("Dentro do UseEffect");
+    console.log("FormRef:" + formRef);
+  }, []);
 
   const handleChangeInput = (e) => setInputValue(e.target.value);
 
@@ -25,7 +31,7 @@ const FormSection = ({ onHandleSubmit }) => {
     <div className="section-form">
       <h3>O que você precisa guardar ? </h3>
 
-      <form onSubmit={hadnleSubmit} className="form-add">
+      <form ref={formRef} onSubmit={hadnleSubmit} className="form-add">
         <select name="quantity">
           {ids.map((id, index) => (
             <option key={id} value={index + 1}>
